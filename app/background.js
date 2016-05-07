@@ -6,6 +6,8 @@
 import { app, Menu } from 'electron';
 import { devMenuTemplate } from './helpers/dev_menu_template';
 import { editMenuTemplate } from './helpers/edit_menu_template';
+import { viewMenuTemplate } from './helpers/view_menu_template';
+import { windowMenuTemplate } from './helpers/window_menu_template';
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared
@@ -14,13 +16,16 @@ import env from './env';
 
 var mainWindow;
 
+// This is for setting menus on the tray/right click
 var setApplicationMenu = function () {
-    var menus = [editMenuTemplate];
+    var menus = [editMenuTemplate, viewMenuTemplate, windowMenuTemplate];
     if (env.name !== 'production') {
         menus.push(devMenuTemplate);
     }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
+
+require('electron-reload')(__dirname)
 
 app.on('ready', function () {
     setApplicationMenu();
@@ -35,6 +40,7 @@ app.on('ready', function () {
     if (env.name !== 'production') {
         mainWindow.openDevTools();
     }
+
 });
 
 app.on('window-all-closed', function () {

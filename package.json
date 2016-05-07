@@ -27,5 +27,8 @@
     "pretest": "gulp build --env=test",
     "test": "electron-mocha build --renderer",
     "install-native": "node ./tasks/install_native_module"
+  },
+  "dependencies": {
+    "electron-reload": "^0.3.0"
   }
 }

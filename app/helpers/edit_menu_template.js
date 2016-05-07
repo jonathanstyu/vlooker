@@ -1,3 +1,4 @@
+
 export var editMenuTemplate = {
     label: 'Edit',
     submenu: [
