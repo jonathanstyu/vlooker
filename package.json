@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "electron-reload": "^0.3.0",
+    "jquery": "^2.2.3",
     "underscore": "^1.8.3"
   }
 }

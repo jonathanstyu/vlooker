@@ -1,8 +1,15 @@
-window.$ = window.jQuery = require("./app_javascripts/jquery");
-window._ = require("./app_javascripts/underscore-min");
+// window.$ = window.jQuery = require("./app_javascripts/jquery");
+var $ = require('jquery'); 
+var _ = require('underscore'); 
 require("./app_javascripts/notifications");
+require("./helpers/html_templates");
 
 $(document).ready(function () {
+  _.each([2, 3], function (each) {
+    console.log(each)
+  })
+  // var compiled = _.template(boxes_template)
+  $('#container').html("compiled")
     
   $(".box").on('dragenter', function (e) {
     e.preventDefault(); 
