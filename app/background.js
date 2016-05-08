@@ -4,10 +4,11 @@
 // window from here.
 
 import { app, Menu } from 'electron';
-import { devMenuTemplate } from './helpers/dev_menu_template';
-import { editMenuTemplate } from './helpers/edit_menu_template';
-import { viewMenuTemplate } from './helpers/view_menu_template';
-import { windowMenuTemplate } from './helpers/window_menu_template';
+import { devMenuTemplate } from './helpers/menu_templates/dev_menu_template';
+import { editMenuTemplate } from './helpers/menu_templates/edit_menu_template';
+import { viewMenuTemplate } from './helpers/menu_templates/view_menu_template';
+import { windowMenuTemplate } from './helpers/menu_templates/window_menu_template';
+
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared

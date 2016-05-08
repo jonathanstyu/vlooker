@@ -51,6 +51,7 @@ var bundleApplication = function () {
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
             bundle(srcDir.path('./app_javascripts/jquery.js'), destDir.path('./app_javascripts/jquery.js')),
             bundle(srcDir.path('./app_javascripts/app.js'), destDir.path('./app_javascripts/app.js')),
+            bundle(srcDir.path('./app_javascripts/underscore-min.js'), destDir.path('./app_javascripts/underscore-min.js'))
         ]);
 };
 

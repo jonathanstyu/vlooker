@@ -29,6 +29,7 @@
     "install-native": "node ./tasks/install_native_module"
   },
   "dependencies": {
-    "electron-reload": "^0.3.0"
+    "electron-reload": "^0.3.0",
+    "underscore": "^1.8.3"
   }
 }

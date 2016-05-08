@@ -1,8 +1,28 @@
-$(document).ready(function () {
-  var drop1 = document.getElementById('drop');
-  var drop2 = document.getElementById('dropper2');
-  var drop = document.getElementsByClassName('box'); 
+window.$ = window.jQuery = require("./app_javascripts/jquery");
+window._ = require("./app_javascripts/underscore-min");
+require("./app_javascripts/notifications");
 
-  console.log("hellos")
-  $(".box").css('border', "3px solid red")
+$(document).ready(function () {
+    
+  $(".box").on('dragenter', function (e) {
+    e.preventDefault(); 
+    e.stopPropagation(); 
+    
+    $(this).css('border', '2px dashed lightblue')
+    return false
+  })
+  
+  $(".box").on('dragover', function (e) {
+    e.preventDefault(); 
+    e.stopPropagation(); 
+  })
+  
+  $(document).on('drop', function (e) {
+    e.defaultPrevented = true
+    e.preventDefault(); 
+    e.stopPropagation();
+    var file = e.originalEvent.dataTransfer.files[0]; 
+    console.log("File you dragged is here", file.path); 
+  })  
+  
 })
