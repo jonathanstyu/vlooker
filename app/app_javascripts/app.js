@@ -5,11 +5,9 @@ require("./app_javascripts/notifications");
 require("./helpers/html_templates");
 
 $(document).ready(function () {
-  _.each([2, 3], function (each) {
-    console.log(each)
-  })
-  // var compiled = _.template(boxes_template)
-  $('#container').html("compiled")
+  
+  var compiled = _.template(boxes_template)
+  $('#container').html(compiled)
     
   $(".box").on('dragenter', function (e) {
     e.preventDefault(); 
