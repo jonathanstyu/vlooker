@@ -7,8 +7,10 @@
   "copyright": "© 2016, your company here",
   "main": "background.js",
   "dependencies": {
+    "animate.css": "^3.5.1",
     "fs-jetpack": "^0.7.0",
-    "furtive": "^2.2.4"
+    "furtive": "^2.2.4",
+    "xlsx": "^0.8.0"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {
