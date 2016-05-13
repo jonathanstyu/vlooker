@@ -8,7 +8,9 @@
   "main": "background.js",
   "dependencies": {
     "animate.css": "^3.5.1",
+    "babyparse": "^0.4.6",
     "electron-json-storage": "^2.0.0",
+    "file-api": "^0.10.4",
     "fs-jetpack": "^0.7.0",
     "xlsx": "^0.8.0"
   },

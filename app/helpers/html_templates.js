@@ -4,7 +4,7 @@ boxes_template = "<div class='box grd-row txt--center brdr--dark-gray animated b
 <h4 class='txt--center'>Drop Sheet <%= boxid %> Here. XLS, XLSX Accepted</h4>\
 </div>"
 
-fileHTMLTemplate = "<table class='grd-row p1 fnt--white'>\
+fileHTMLTemplate = "<table class='grd-row'>\
 <tr>\
 <th>File Name</th>\
 <td><%= fileName %></td>\
@@ -24,10 +24,7 @@ fileHTMLTemplate = "<table class='grd-row p1 fnt--white'>\
 <th>Data Type</th>\
 <td><%= dataType %></td>\
 </tr>\
-\
-<tr>\
-<th>Path</th>\
-<td><%= path %></td>\
-</tr>\
-\
-</table>"
+</table><hr>"
+
+xlsDivContainer = "<div class='grd-row' id='xls-<%= sheetName %>'>\
+</div>"
