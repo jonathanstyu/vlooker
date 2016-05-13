@@ -1,29 +1,36 @@
-var EXPORTED_SYMBOLS = ['fileHTMLTemplate']
+const ipcRenderer = require('electron').ipcRenderer;
+const dialog = require('electron').remote.dialog; 
+var fs = require('fs'); 
+var XLSX = require('XLSX')
+var EXPORTED_SYMBOLS = ['handleUploadedFiles', 'findFilesWithPath']
 
-fileHTMLTemplate = "<table class='grd-row-col-2-6 p2'>\
-<tr>\
-<th>File Name</th>\
-<td><%= fileName %></td>\
-</tr>\
-\
-<tr>\
-<th>File Size</th>\
-<td><%= fileSize %></td>\
-</tr>\
-\
-<tr>\
-<th>Last Modified</th>\
-<td><%= dateLastModified %></td>\
-</tr>\
-\
-<tr>\
-<th>Data Type</th>\
-<td><%= dataType %></td>\
-</tr>\
-\
-<tr>\
-<th>Path</th>\
-<td><%= path %></td>\
-</tr>\
-\
-</table>"
+handleUploadedFiles = function (filenames) {
+  var file = new File(filenames[0]); 
+  var compiledTable = _.template(fileHTMLTemplate);
+  $('#bodycontainer').html(compiledTable({
+    fileName: file.name,
+    fileSize: file.size,
+    dateLastModified: file.lastModifiedDate,
+    dataType: file.type,
+    path: file.path
+  }))
+}
+
+findFilesWithPath = function (filenames) {
+  _.each(filenames, function (filename) {
+    var workbook = XLSX.readFile(filename)
+    console.log(workbook)
+  })
+}
+
+ipcRenderer.on('uploadFile', function () {
+  dialog.showOpenDialog({
+    filters: [
+      {name: "Sheets", extensions: ['xls', 'xlsx']}
+    ], 
+    properties: ['openFile', 'multiSelections']
+  }, function(filenames){
+    findFilesWithPath(filenames)
+  }) // close the dialog.showOpenDialog
+})
+

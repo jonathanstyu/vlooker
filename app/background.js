@@ -3,11 +3,12 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app, Menu } from 'electron';
+import { app, Menu, globalShortcut } from 'electron';
 import { devMenuTemplate } from './helpers/menu_templates/dev_menu_template';
 import { editMenuTemplate } from './helpers/menu_templates/edit_menu_template';
 import { viewMenuTemplate } from './helpers/menu_templates/view_menu_template';
 import { windowMenuTemplate } from './helpers/menu_templates/window_menu_template';
+import { dataMenuTemplate } from './helpers/menu_templates/data_menu_template';
 
 import createWindow from './helpers/window';
 
@@ -19,7 +20,7 @@ var mainWindow;
 
 // This is for setting menus on the tray/right click
 var setApplicationMenu = function () {
-    var menus = [editMenuTemplate, viewMenuTemplate, windowMenuTemplate];
+    var menus = [editMenuTemplate, viewMenuTemplate, windowMenuTemplate, dataMenuTemplate];
     if (env.name !== 'production') {
         menus.push(devMenuTemplate);
     }
@@ -41,7 +42,7 @@ app.on('ready', function () {
     if (env.name !== 'production') {
         mainWindow.openDevTools();
     }
-
+    
 });
 
 app.on('window-all-closed', function () {

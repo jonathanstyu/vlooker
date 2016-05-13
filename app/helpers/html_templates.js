@@ -1,12 +1,33 @@
-var EXPORTED_SYMBOLS = ['boxes_template']
+var EXPORTED_SYMBOLS = ['boxes_template', 'fileHTMLTemplate']
 
-boxes_template = "<div class='box grd-row-col-3-6 brdr-dark-gray animated bounceIn' id='drop'>\
-<h3 class='txt--center'>Drop Excel Sheet 1 Here</h3>\
-<div class='content'><p class='txt--center'>Prepare for Analysis</p></div></div>\
-\
-<div class='grd-row-col-1-6'></div>\
-\
-<div class='box grd-row-col-3-6 brdr-dark-gray animated bounceIn' id='drop2'>\
-<h3 class='txt--center'>Drop Excel Sheet 2 Here</h3>\
-<div class='content'><p class='txt--center'>Prepare for Analysis</p></div>\
+boxes_template = "<div class='box grd-row txt--center brdr--dark-gray animated bounceIn' id='drop-<%= boxid %>'>\
+<h4 class='txt--center'>Drop Sheet <%= boxid %> Here. XLS, XLSX Accepted</h4>\
 </div>"
+
+fileHTMLTemplate = "<table class='grd-row p1 fnt--white'>\
+<tr>\
+<th>File Name</th>\
+<td><%= fileName %></td>\
+</tr>\
+\
+<tr>\
+<th>File Size</th>\
+<td><%= fileSize %></td>\
+</tr>\
+\
+<tr>\
+<th>Last Modified</th>\
+<td><%= dateLastModified %></td>\
+</tr>\
+\
+<tr>\
+<th>Data Type</th>\
+<td><%= dataType %></td>\
+</tr>\
+\
+<tr>\
+<th>Path</th>\
+<td><%= path %></td>\
+</tr>\
+\
+</table>"
