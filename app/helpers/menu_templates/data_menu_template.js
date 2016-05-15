@@ -5,17 +5,24 @@ export var dataMenuTemplate = {
   label: 'Data',
   submenu: [
       {
-        label: 'Upload Sheet',
-        accelerator: 'CmdOrCtrl+U',
+        label: 'Upload Index File',
+        accelerator: 'CmdOrCtrl+I',
         click: function(item, focusedWindow) {
-          focusedWindow.webContents.send('uploadFile')
+          focusedWindow.webContents.send('uploadIndexFile')
         } // close click // anon function 
       }, // close upload sheet
       {
-        label: 'Other Stuff', 
-        accelerator: 'CmdOrCtrl+S',
+        label: 'Upload Lookup File', 
+        accelerator: 'CmdOrCtrl+L',
         click: function (item, focusedWindow) {
-          focusedWindow.webContents.send('saveFile')
+          focusedWindow.webContents.send('uploadLookupFile')
+        }
+      }, 
+      {
+        label: 'Download Result File', 
+        accelerator: 'CmdOrCtrl+D',
+        click: function (item, focusedWindow) {
+          focusedWindow.webContents.send('downloadResultFile')
         }
       }
     ]
