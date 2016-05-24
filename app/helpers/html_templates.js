@@ -18,9 +18,9 @@ fileHTMLTemplate = "<table class='data-set grd-row'>\
 </tr>\
 </table><hr>"
 
-datatabletemplate = "<div class='grd-row-col-2-6' id='<%= divID %>'>\
+datatabletemplate = "<div class='grd-row-col-3-6' id='<%= divID %>'>\
 <p class='txt--center'><%= divID %></p>\
-<table id='<%= divID %>-table'>\
+<table id='<%= divID %>-table' class='display compact'>\
 <thead><tr>\
 <th class='txt--center'>Header Name</th>\
 <th class='txt--center'>Data Type</th>\

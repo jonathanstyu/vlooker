@@ -43,18 +43,15 @@ handleCSVfile = function (filename, sheetClassification) {
 
 // build the rows
 buildTable = function (parsedData, sheetClassification) {
-  // console.log(parsedData.data)
-  // _.each(parsedData.data[0], function (rowCell) {
-  //   console.log(rowCell)
-  // })
     var zippedHeaders = _.zip(parsedData.data[0], parsedData.data[1])
   _.each(zippedHeaders, function (headerSet) {
     var templatedRows = _.template(dataRowTemplate)
     $("#" + sheetClassification + " tbody").append(templatedRows({
-      headerName: zippedHeaders[0],
-      headerDataType: typeof zippedHeaders[1]
+      headerName: headerSet[0],
+      headerDataType: typeof headerSet[1]
     }))
   })
+  $("#" + sheetClassification + '-table').dataTable()
 }
 
 // Shared code 
