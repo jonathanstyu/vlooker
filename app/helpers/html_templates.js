@@ -1,8 +1,4 @@
-var EXPORTED_SYMBOLS = ['boxes_template', 'fileHTMLTemplate', 'datatabletemplate', 'dataRowTemplate']
-
-boxes_template = "<div class='box grd-row txt--center brdr--dark-gray animated bounceIn' id='drop-<%= boxid %>'>\
-<h4 class='txt--center'>Drop Sheet <%= boxid %> Here. XLS, XLSX Accepted</h4>\
-</div>"
+var EXPORTED_SYMBOLS = ['fileHTMLTemplate', 'datatabletemplate', 'dataRowTemplate']
 
 fileHTMLTemplate = "<table class='data-set grd-row'>\
 <tr>\
@@ -18,12 +14,14 @@ fileHTMLTemplate = "<table class='data-set grd-row'>\
 </tr>\
 </table><hr>"
 
-datatabletemplate = "<div class='grd-row-col-3-6 p2' id='<%= divID %>'>\
-<p class='txt--center'><%= divID %>\
-<button class='btn--red btn--s delete-button' id='<%= divID %>'>Delete</button>\
-<button class='btn--green btn--s add-button' id='<%= divID %>'>Add</button>\
-</p>\
-<table id='<%= divID %>' class='display compact table'>\
+datatabletemplate = "<div class='column col-6 p2' id='<%= divID %>'>\
+<p class='txt--center'><%= divID %></p>\
+<div class='btn-group btn-group-block pb-10'>\
+<button class='btn delete-button' id='<%= divID %>'>Delete</button>\
+<button class='btn add-button' id='<%= divID %>'>Add</button>\
+</div>\
+<div class='divider'></div>\
+<table id='<%= divID %>' class='display compact data-table'>\
 <thead><tr>\
 <th class='txt--center'>Header Name</th>\
 <th class='txt--center'>Data Type</th>\
@@ -31,7 +29,7 @@ datatabletemplate = "<div class='grd-row-col-3-6 p2' id='<%= divID %>'>\
 <tbody></tbody>\
 </table></div>"
 
-dataRowTemplate = "<tr id='<%= headerIndex %>'>\
-<td><%= headerName %></td>\
-<td><%= headerDataType %></td>\
+dataRowTemplate = "<tr class='<%= className %>'>\
+<td id='header-<%=headerIndex%>'><%= headerName %></td>\
+<td id='datatype-<%=headerIndex%>'><%= headerDataType %></td>\
 </tr>"

@@ -60,22 +60,20 @@ render = function () {
   })
   
   if (mainParser.indexArray.length > 0) {
-    $('#uploadindex').removeClass('btn--gray').addClass('btn--blue')
+    $('#uploadindex').addClass('active')
   }
   
   if (mainParser.lookupArray.length > 0) {
-    $('#uploadlookup').removeClass('btn--gray').addClass('btn--blue')
+    $('#uploadlookup').addClass('active')
   }
   
   if (mainParser.vlookupOptions['indexCol']) {
-    $('#selectindex').removeClass('btn--gray').addClass('btn--blue')
-    $('#index.table').find('tr').attr('id', 2).addClass('clicked')
+    $('#selectindex').addClass('active')
   }
   
   if (mainParser.vlookupOptions['lookupCol']) {
-    $('#selectlookup').removeClass('btn--gray').addClass('btn--blue')
+    $('#selectlookup').addClass('active')
   }
-  
   
 }
 
@@ -86,15 +84,27 @@ buildTable = function (parsedData, sheetClassification) {
   }
   
   var zippedHeaders = _.zip(parsedData[0], parsedData[1])
+  $("#" + sheetClassification + " tbody").empty()
   _.each(zippedHeaders, function (headerSet, headerIndex) {
     var templatedRows = _.template(dataRowTemplate)
     
-    $("#" + sheetClassification + " tbody").append(templatedRows({
-      headerName: headerSet[0],
-      headerDataType: typeof headerSet[1],
-      headerIndex: headerIndex
-    }))
-  }); 
+    //this rather tortured if-else adds a clicked class to the clicked row in the mainParser's options using the if-else to determine whether the option isn't a null + whether the header in question is == to the option's number
+    if (mainParser.vlookupOptions[sheetClassification + 'Col'] && headerIndex == mainParser.vlookupOptions[sheetClassification + 'Col']) {
+      $("#" + sheetClassification + " tbody").append(templatedRows({
+        headerName: headerSet[0],
+        headerDataType: typeof headerSet[1],
+        headerIndex: headerIndex, 
+        className: sheetClassification + '-clicked'
+      }));
+    } else {
+      $("#" + sheetClassification + " tbody").append(templatedRows({
+        headerName: headerSet[0],
+        headerIndex: headerIndex, 
+        headerDataType: typeof headerSet[1],
+        className: ''
+      }));
+    } 
+  });
   
 }
 
@@ -121,27 +131,27 @@ var openDialogPicker = function (sheetClassification) {
   }) // close the dialog.showOpenDialog  
 }
 
-
 // action functions based on clicks 
 $(document).on('click', '.add-button', function (event) {
   openDialogPicker(event.target.id); 
+  render(); 
 })
 
 $(document).on('click', '.delete-button', function (event) {
   mainParser.removeArray(event.target.id); 
-  $("#" + event.target.id + " tbody").empty(); 
+  render(); 
 })
 
-$(document).on('click', '#index.table', function (event) {
-  mainParser.updateOptions('indexCol', parseInt(event.target.id))
-  $(event.target).parents('tr').addClass('bg--blue')
-  render()
+$(document).on('click', '#index.data-table', function (event) {
+  // the split is to parse the ID, which is classified as "row-[int]"
+  mainParser.updateOptions('indexCol', parseInt(event.target.id.split('-')[1])); 
+  render();  
 })
 
-$(document).on('click', '#lookup.table', function (event) {
-  mainParser.updateOptions('lookupCol', parseInt(event.target.id))
-  $(event.target).parents('tr').addClass('bg--blue')
-  render()
+$(document).on('click', '#lookup.data-table', function (event) {
+  // the split is to parse the ID, which is classified as "row-[int]"
+  mainParser.updateOptions('lookupCol', parseInt(event.target.id.split('-')[1]))
+  render(); 
 })
 
 // Tied to keyboard shortcuts

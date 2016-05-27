@@ -11,16 +11,18 @@
 </head>
 <body>
 
-    <div class='grd p1 bg--off-white'>
-      <div id="push" class='grd-row p1'>
-        <button class='btn--gray btn--s' id='uploadindex' disabled>Upload Index File</button>
-        <button class='btn--gray btn--s' id='uploadlookup' disabled>Upload Lookup File</button>
-        <button class='btn--gray btn--s' id='selectindex' disabled>Select Index Column</button>
-        <button class='btn--gray btn--s' id='selectlookup' disabled>Select Lookup Column</button>
-        <button class='btn--gray btn--s' id='selectaddCols' disabled>Select Append Columns</button>
-        <button class='btn--gray btn--s' id='runvlookup' disabled>Run VLookup</button>
+    <div class='container'>
+      <div id="push">
+        <ul class='tab tab-block'>
+          <li class='tab-item' id='uploadindex'>Upload Index File</li>
+          <li class='tab-item' id='uploadlookup'>Upload Lookup File</li>
+          <li class='tab-item' id='selectindex'>Select Index Column</li>
+          <li class='tab-item' id='selectlookup'>Select Lookup Column</li>
+          <li class='tab-item' id='selectaddCols'>Select Append Columns</li>
+          <li class='tab-item' id='runvlookup'>Run VLookup</li>
+        </ul>
       </div>
-      <div class='grd-row' id='content'></div>
+      <div class='columns' id='content'></div>
     </div>
     
 </body>

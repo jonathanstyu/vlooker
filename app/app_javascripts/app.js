@@ -17,7 +17,7 @@ $(document).ready(function () {
     $('#content').append(dataTableTemplate({
       divID: divID
     }));
-    $('.table').dataTable()
+    $('.data-table').dataTable()
   })
   
   // var index = [["er", "3535"], ["pikachu", "4745"], ["squirtable", "6"]]
