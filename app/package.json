@@ -14,6 +14,7 @@
     "electron-json-storage": "^2.0.0",
     "file-api": "^0.10.4",
     "fs-jetpack": "^0.7.0",
+    "spectre.css": "^0.1.23",
     "tablesaw": "^2.0.3",
     "xlsx": "^0.8.0"
   },

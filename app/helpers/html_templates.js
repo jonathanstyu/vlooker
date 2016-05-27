@@ -18,9 +18,12 @@ fileHTMLTemplate = "<table class='data-set grd-row'>\
 </tr>\
 </table><hr>"
 
-datatabletemplate = "<div class='grd-row-col-3-6' id='<%= divID %>'>\
-<p class='txt--center'><%= divID %></p>\
-<table id='<%= divID %>-table' class='display compact'>\
+datatabletemplate = "<div class='grd-row-col-3-6 p2' id='<%= divID %>'>\
+<p class='txt--center'><%= divID %>\
+<button class='btn--red btn--s delete-button' id='<%= divID %>'>Delete</button>\
+<button class='btn--green btn--s add-button' id='<%= divID %>'>Add</button>\
+</p>\
+<table id='<%= divID %>' class='display compact table'>\
 <thead><tr>\
 <th class='txt--center'>Header Name</th>\
 <th class='txt--center'>Data Type</th>\
@@ -28,7 +31,7 @@ datatabletemplate = "<div class='grd-row-col-3-6' id='<%= divID %>'>\
 <tbody></tbody>\
 </table></div>"
 
-dataRowTemplate = "<tr>\
+dataRowTemplate = "<tr id='<%= headerIndex %>'>\
 <td><%= headerName %></td>\
 <td><%= headerDataType %></td>\
 </tr>"

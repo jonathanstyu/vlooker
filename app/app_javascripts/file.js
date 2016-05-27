@@ -8,9 +8,13 @@ var FileAPI = require('file-api') // for dealing with files
 var File = FileAPI.File // for file data
 var XLSX = require('XLSX') // parsing XLSX + XLS
 var Baby = require('BabyParse') // parsing CSV
+var Parser = require("./vlook"); // Vlookup functionality
 
 // for exporting to App.js and others
 var EXPORTED_SYMBOLS = ['handleExcelfile', 'handleCSVfile']
+
+// Handles parsing
+var mainParser = new Parser(); 
 
 // functions 
 
@@ -36,25 +40,65 @@ handleCSVfile = function (filename, sheetClassification) {
     if (err) {
       console.log(err)
     } else {
-      buildTable(Baby.parse(data), sheetClassification)
+      
+      // Big ugly hack so that I can handle populate the arrays
+      if (sheetClassification == "index") {
+        mainParser.populateIndexArray(data)
+      } else {
+        mainParser.populateLookupArray(data)
+      }
+      render(); 
     }
   })
 }
 
-// build the rows
-buildTable = function (parsedData, sheetClassification) {
-    var zippedHeaders = _.zip(parsedData.data[0], parsedData.data[1])
-  _.each(zippedHeaders, function (headerSet) {
-    var templatedRows = _.template(dataRowTemplate)
-    $("#" + sheetClassification + " tbody").append(templatedRows({
-      headerName: headerSet[0],
-      headerDataType: typeof headerSet[1]
-    }))
+// broad function that ties together all the UI-related code
+render = function () {
+  var arrayIndexPairs = _.zip([mainParser.indexArray, mainParser.lookupArray], ['index', 'lookup']); 
+  _.each(arrayIndexPairs, function (arrayIndexPair) {
+    buildTable(arrayIndexPair[0], arrayIndexPair[1]); 
   })
-  $("#" + sheetClassification + '-table').dataTable()
+  
+  if (mainParser.indexArray.length > 0) {
+    $('#uploadindex').removeClass('btn--gray').addClass('btn--blue')
+  }
+  
+  if (mainParser.lookupArray.length > 0) {
+    $('#uploadlookup').removeClass('btn--gray').addClass('btn--blue')
+  }
+  
+  if (mainParser.vlookupOptions['indexCol']) {
+    $('#selectindex').removeClass('btn--gray').addClass('btn--blue')
+    $('#index.table').find('tr').attr('id', 2).addClass('clicked')
+  }
+  
+  if (mainParser.vlookupOptions['lookupCol']) {
+    $('#selectlookup').removeClass('btn--gray').addClass('btn--blue')
+  }
+  
+  
 }
 
-// Shared code 
+// helper function to build the table interface
+buildTable = function (parsedData, sheetClassification) {
+  if (parsedData == []) {
+    return
+  }
+  
+  var zippedHeaders = _.zip(parsedData[0], parsedData[1])
+  _.each(zippedHeaders, function (headerSet, headerIndex) {
+    var templatedRows = _.template(dataRowTemplate)
+    
+    $("#" + sheetClassification + " tbody").append(templatedRows({
+      headerName: headerSet[0],
+      headerDataType: typeof headerSet[1],
+      headerIndex: headerIndex
+    }))
+  }); 
+  
+}
+
+// Shared code to select and upload a data file
 var openDialogPicker = function (sheetClassification) {
   dialog.showOpenDialog({
     filters: [
@@ -77,12 +121,34 @@ var openDialogPicker = function (sheetClassification) {
   }) // close the dialog.showOpenDialog  
 }
 
+
+// action functions based on clicks 
+$(document).on('click', '.add-button', function (event) {
+  openDialogPicker(event.target.id); 
+})
+
+$(document).on('click', '.delete-button', function (event) {
+  mainParser.removeArray(event.target.id); 
+  $("#" + event.target.id + " tbody").empty(); 
+})
+
+$(document).on('click', '#index.table', function (event) {
+  mainParser.updateOptions('indexCol', parseInt(event.target.id))
+  $(event.target).parents('tr').addClass('bg--blue')
+  render()
+})
+
+$(document).on('click', '#lookup.table', function (event) {
+  mainParser.updateOptions('lookupCol', parseInt(event.target.id))
+  $(event.target).parents('tr').addClass('bg--blue')
+  render()
+})
+
 // Tied to keyboard shortcuts
 ipcRenderer.on('uploadIndexFile', function () {
-  openDialogPicker("idx"); 
+  openDialogPicker("index"); 
 })
 
 ipcRenderer.on('uploadLookupFile', function () {
   openDialogPicker("lookup"); 
 })
-

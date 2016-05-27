@@ -1,15 +1,58 @@
 var $ = require('jquery'); 
 var _ = require('underscore'); 
+var Baby = require('BabyParse') // parsing CSV
 
-var Parser = function (indexArray, lookupArray) {
-  this.indexArray = indexArray; 
-  this.lookupArray = lookupArray; 
+var Parser = function () {
+  this.indexArray = []; 
+  this.lookupArray = []; 
+  
+  this.vlookupOptions = {
+    'indexCol': null,
+    'lookupCol': null,
+    'colsToAppend': null,
+    'ready': false
+  }
+  
+  // helper functions to populate/clear arrays to search for
+  this.populateIndexArray = function (indexArray) {
+    this.indexArray = Baby.parse(indexArray).data; 
+  }
+  
+  this.populateLookupArray = function (lookupArray) {
+    this.lookupArray = Baby.parse(lookupArray).data; 
+  }
+  
+  this.removeArray = function (identifier) {
+    if (identifier == 'index') {
+      this.indexArray = []; 
+    } else {
+      this.lookupArray = []; 
+    }
+  }
+  
+  // helper function to populate vlookup options and check for readiness
+  this.updateOptions = function (identifier, value) {
+    this.vlookupOptions[identifier] = value;
+    if (this.vlookupOptions['indexCol'] == '' || this.vlookupOptions['lookupCol'] == '' || this.vlookupOptions['colsToAppend'] == '') {
+      this.vlookupOptions['ready'] == false; 
+    } else {
+      this.vlookupOptions['ready'] == true; 
+    }
+  }
   
   // execution function
   // indexCol :: Int = the column in indexArray where the indices are 
   // lookupCol :: Int = the column in lookupArray where you look for the indices
   // cols to append :: Array = what you want to join on to the index
-  this.vlookup = function (indexCol, lookupCol, colsToAppend) {
+  this.vlookup = function () {
+    if (!this.vlookupOptions.ready) {
+      return
+    }
+    
+    var indexCol = this.vlookupOptions['indexCol']
+    var lookupCol = this.vlookupOptions['lookupCol']
+    var colsToAppend = this.vlookupOptions['colsToAppend']
+    
     var populatedHash = prepareLookupHash(lookupCol); 
     var mergedArrays = searchAndAppend(indexCol, populatedHash, colsToAppend)
     console.log(populatedHash)
