@@ -16,6 +16,9 @@ var EXPORTED_SYMBOLS = ['handleExcelfile', 'handleCSVfile']
 // Handles parsing
 var mainParser = new Parser(); 
 
+// Indicates Column Append Mode
+var colAppendMode = false; 
+
 // functions 
 
 // Function that creates a File and the information panel 
@@ -60,19 +63,36 @@ render = function () {
   })
   
   if (mainParser.indexArray.length > 0) {
-    $('#uploadindex').addClass('active')
+    $('#uploadindex').addClass('completed')
   }
   
   if (mainParser.lookupArray.length > 0) {
-    $('#uploadlookup').addClass('active')
+    $('#uploadlookup').addClass('completed')
   }
   
   if (mainParser.vlookupOptions['indexCol']) {
-    $('#selectindex').addClass('active')
+    $('#selectindex').addClass('completed')
   }
   
   if (mainParser.vlookupOptions['lookupCol']) {
-    $('#selectlookup').addClass('active')
+    $('#selectlookup').addClass('completed')
+    
+    // add the col append button, and only one
+    if ($('#lookup-append').length == 0) {
+      $('#buttons-lookup').append("<button class='btn lookup-button' id='lookup-append'>Select Append Col</button>")
+    }
+  }
+  
+  if (mainParser.vlookupOptions['colsToAppend']) {
+    $('#selectaddCols').addClass('completed')
+  }
+  
+  console.log(mainParser.vlookupOptions)
+  // if the vlookup parser has all of its options ready, then we can run the vlookup
+  if (mainParser.vlookupOptions['ready']) {
+    $('#runvlookup').prop('disabled', false); 
+  } else {
+    $('#runvlookup').prop('disabled', true); 
   }
   
 }
@@ -90,13 +110,25 @@ buildTable = function (parsedData, sheetClassification) {
     
     //this rather tortured if-else adds a clicked class to the clicked row in the mainParser's options using the if-else to determine whether the option isn't a null + whether the header in question is == to the option's number
     if (mainParser.vlookupOptions[sheetClassification + 'Col'] && headerIndex == mainParser.vlookupOptions[sheetClassification + 'Col']) {
+      // for selecting index/lookup cols
+      
       $("#" + sheetClassification + " tbody").append(templatedRows({
         headerName: headerSet[0],
         headerDataType: typeof headerSet[1],
         headerIndex: headerIndex, 
         className: sheetClassification + '-clicked'
       }));
+    } else if (sheetClassification == 'lookup' && headerIndex == mainParser.vlookupOptions['colsToAppend']) {
+      // specific only to the lookup sheet, the columns to append are colored 
+      
+      $("#" + sheetClassification + " tbody").append(templatedRows({
+        headerName: headerSet[0],
+        headerDataType: typeof headerSet[1],
+        headerIndex: headerIndex, 
+        className: sheetClassification + '-clicked-append'
+      }));
     } else {
+      // covers the normal situation, no formatting
       $("#" + sheetClassification + " tbody").append(templatedRows({
         headerName: headerSet[0],
         headerIndex: headerIndex, 
@@ -139,9 +171,17 @@ $(document).on('click', '.add-button', function (event) {
 
 $(document).on('click', '.delete-button', function (event) {
   mainParser.removeArray(event.target.id); 
+  $('#upload' + event.target.id).removeClass('completed')
+  $('#select' + event.target.id).removeClass('completed')
+  
+  if (event.target.id == 'lookup') {
+    $('#lookup-append').remove()
+  }
+  
   render(); 
 })
 
+// Handles clicks on the data tables, lookup and index alike
 $(document).on('click', '#index.data-table', function (event) {
   // the split is to parse the ID, which is classified as "row-[int]"
   mainParser.updateOptions('indexCol', parseInt(event.target.id.split('-')[1])); 
@@ -150,7 +190,18 @@ $(document).on('click', '#index.data-table', function (event) {
 
 $(document).on('click', '#lookup.data-table', function (event) {
   // the split is to parse the ID, which is classified as "row-[int]"
-  mainParser.updateOptions('lookupCol', parseInt(event.target.id.split('-')[1]))
+  
+  if (colAppendMode) {
+    mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
+  } else {
+    mainParser.updateOptions('lookupCol', parseInt(event.target.id.split('-')[1]))
+  }
+  
+  render(); 
+})
+
+$(document).on('click', '#lookup-append', function (event) {
+  colAppendMode = !colAppendMode; 
   render(); 
 })
 

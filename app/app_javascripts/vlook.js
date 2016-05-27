@@ -33,6 +33,8 @@ var Parser = function () {
   // helper function to populate vlookup options and check for readiness
   this.updateOptions = function (identifier, value) {
     this.vlookupOptions[identifier] = value;
+    
+    console.log(this.vlookupOptions['indexCol'] == '' || this.vlookupOptions['lookupCol'] == '' || this.vlookupOptions['colsToAppend'] == '')
     if (this.vlookupOptions['indexCol'] == '' || this.vlookupOptions['lookupCol'] == '' || this.vlookupOptions['colsToAppend'] == '') {
       this.vlookupOptions['ready'] == false; 
     } else {

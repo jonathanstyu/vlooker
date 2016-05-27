@@ -16,7 +16,7 @@ fileHTMLTemplate = "<table class='data-set grd-row'>\
 
 datatabletemplate = "<div class='column col-6 p2' id='<%= divID %>'>\
 <p class='txt--center'><%= divID %></p>\
-<div class='btn-group btn-group-block pb-10'>\
+<div class='btn-group btn-group-block pb-10' id='buttons-<%= divID %>'>\
 <button class='btn delete-button' id='<%= divID %>'>Delete</button>\
 <button class='btn add-button' id='<%= divID %>'>Add</button>\
 </div>\
