@@ -14,7 +14,9 @@
     "gulp-watch": "^4.3.5",
     "q": "^1.4.1",
     "rollup": "^0.25.4",
-    "yargs": "^4.2.0"
+    "yargs": "^4.2.0",
+    "electron-reload": "^0.3.0",
+    "electron-json-storage": "^2.0.0"
   },
   "optionalDependencies": {
     "appdmg": "^0.3.2",
@@ -30,10 +32,8 @@
     "install-native": "node ./tasks/install_native_module"
   },
   "dependencies": {
-    "electron-json-storage": "^2.0.0",
-    "electron-reload": "^0.3.0",
     "furtive": "^2.2.4",
-    "jquery": "^2.2.3",
+    "jquery": "^2.2.4",
     "underscore": "^1.8.3"
   }
 }

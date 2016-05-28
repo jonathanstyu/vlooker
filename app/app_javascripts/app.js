@@ -5,8 +5,6 @@ require('datatables.net')();
 require("./app_javascripts/notifications");
 require("./app_javascripts/file");
 require("./helpers/html_templates");
-require("./helpers/box_drag");
-require('XLSX'); 
 const ipcRenderer = require('electron').ipcRenderer;
 var Parser = require("./app_javascripts/vlook");
 

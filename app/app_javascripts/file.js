@@ -55,7 +55,7 @@ handleCSVfile = function (filename, sheetClassification) {
   })
 }
 
-// broad function that ties together all the UI-related code
+// broad function that ties together all the UI-related code + checks the Parser
 render = function () {
   var arrayIndexPairs = _.zip([mainParser.indexArray, mainParser.lookupArray], ['index', 'lookup']); 
   _.each(arrayIndexPairs, function (arrayIndexPair) {
@@ -87,12 +87,15 @@ render = function () {
     $('#selectaddCols').addClass('completed')
   }
   
-  console.log(mainParser.vlookupOptions)
+  
   // if the vlookup parser has all of its options ready, then we can run the vlookup
-  if (mainParser.vlookupOptions['ready']) {
-    $('#runvlookup').prop('disabled', false); 
+  mainParser.checkStatus()
+  if (mainParser.vlookupOptions['ready'] && $('#lookup-start').length == 0) {
+    console.log("button enabled!")
+    $('#buttons-lookup').append("<button class='btn' id='lookup-start'>Start Lookup</button>")
   } else {
-    $('#runvlookup').prop('disabled', true); 
+    console.log("button stays disabled")
+    $('#lookup-start').remove()
   }
   
 }

@@ -20,14 +20,16 @@ var mainWindow;
 
 // This is for setting menus on the tray/right click
 var setApplicationMenu = function () {
-    var menus = [editMenuTemplate, viewMenuTemplate, windowMenuTemplate, dataMenuTemplate];
+    var menus = [editMenuTemplate, windowMenuTemplate, dataMenuTemplate];
     if (env.name !== 'production') {
         menus.push(devMenuTemplate);
     }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
-require('electron-reload')(__dirname)
+if (env.name !== 'production') {
+    require('electron-reload')(__dirname)
+}
 
 app.on('ready', function () {
     setApplicationMenu();

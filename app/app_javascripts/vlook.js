@@ -25,20 +25,24 @@ var Parser = function () {
   this.removeArray = function (identifier) {
     if (identifier == 'index') {
       this.indexArray = []; 
+      this.vlookupOptions['indexCol'] = null; 
     } else {
       this.lookupArray = []; 
+      this.vlookupOptions['lookupCol'] = null; 
     }
   }
   
   // helper function to populate vlookup options and check for readiness
   this.updateOptions = function (identifier, value) {
     this.vlookupOptions[identifier] = value;
-    
-    console.log(this.vlookupOptions['indexCol'] == '' || this.vlookupOptions['lookupCol'] == '' || this.vlookupOptions['colsToAppend'] == '')
-    if (this.vlookupOptions['indexCol'] == '' || this.vlookupOptions['lookupCol'] == '' || this.vlookupOptions['colsToAppend'] == '') {
-      this.vlookupOptions['ready'] == false; 
+    this.checkStatus()
+  }
+  
+  this.checkStatus = function () {
+    if (this.vlookupOptions['indexCol'] === null || this.vlookupOptions['lookupCol'] === null || this.vlookupOptions['colsToAppend'] === null) {
+      this.vlookupOptions['ready'] = false; 
     } else {
-      this.vlookupOptions['ready'] == true; 
+      this.vlookupOptions['ready'] = true; 
     }
   }
   

@@ -1,10 +1,10 @@
 {
   "name": "VLooker",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
+  "productName": "Vlooker",
+  "description": "A desktop app just for doing vlookups on big CSV files",
   "version": "0.1.0",
-  "author": "Mr Gumby",
-  "copyright": "© 2016, your company here",
+  "author": "Jonathan Yu",
+  "copyright": "© 2016, Jonathan Yu",
   "main": "background.js",
   "dependencies": {
     "animate.css": "^3.5.1",
@@ -16,7 +16,9 @@
     "fs-jetpack": "^0.7.0",
     "spectre.css": "^0.1.23",
     "tablesaw": "^2.0.3",
-    "xlsx": "^0.8.0"
+    "xlsx": "^0.8.0",
+    "jquery": "^2.2.4",
+    "underscore": "^1.8.3"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {
