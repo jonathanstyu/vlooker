@@ -3,11 +3,13 @@ const dialog = require('electron').remote.dialog;
 const screen = require('electron').screen; 
 
 // Required libraries 
+var $ = require('../helpers/jquery.min.js'); 
+var _ = require('../helpers/underscore-min.js'); 
 var fs = require('fs') // for CSV parsing
 var FileAPI = require('file-api') // for dealing with files
 var File = FileAPI.File // for file data
 var XLSX = require('XLSX') // parsing XLSX + XLS
-var Baby = require('BabyParse') // parsing CSV
+var Baby = require('../helpers/babyparse.js');  // parsing CSV
 var Parser = require("./vlook"); // Vlookup functionality
 
 // for exporting to App.js and others

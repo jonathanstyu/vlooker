@@ -27,9 +27,9 @@ var setApplicationMenu = function () {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
-if (env.name !== 'production') {
-    require('electron-reload')(__dirname)
-}
+// if (env.name !== 'production') {
+//     require('electron-reload')(__dirname)
+// }
 
 app.on('ready', function () {
     setApplicationMenu();

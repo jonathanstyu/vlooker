@@ -33,5 +33,9 @@
   },
   "scripts": {
     "postinstall": "node ../tasks/rebuild_native_modules"
+  },
+  "env": {
+    "name": "production",
+    "description": "Add here any environment specific stuff you like."
   }
 }
