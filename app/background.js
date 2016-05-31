@@ -22,7 +22,7 @@ var mainWindow;
 var setApplicationMenu = function () {
     var menus = [editMenuTemplate, windowMenuTemplate, dataMenuTemplate];
     if (env.name !== 'production') {
-        menus.push(devMenuTemplate);
+      menus.push(devMenuTemplate);
     }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };

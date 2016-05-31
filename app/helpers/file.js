@@ -8,8 +8,9 @@ var _ = require('../helpers/underscore-min.js');
 var fs = require('fs') // for CSV parsing
 var FileAPI = require('file-api') // for dealing with files
 var File = FileAPI.File // for file data
-var XLSX = require('XLSX') // parsing XLSX + XLS
+// var XLSX = require('XLSX') // parsing XLSX + XLS
 var Baby = require('../helpers/babyparse.js');  // parsing CSV
+var CSV = require('../helpers/csv.min.js');  // parsing CSV pt 2
 var Parser = require("./vlook"); // Vlookup functionality
 
 // for exporting to App.js and others
@@ -44,8 +45,7 @@ handleCSVfile = function (filename, sheetClassification) {
   fs.readFile(filename, 'utf8', function (err, data) {
     if (err) {
       console.log(err)
-    } else {
-      
+    } else {      
       // Big ugly hack so that I can handle populate the arrays
       if (sheetClassification == "index") {
         mainParser.populateIndexArray(data)
@@ -72,11 +72,11 @@ render = function () {
     $('#uploadlookup').addClass('completed')
   }
   
-  if (mainParser.vlookupOptions['indexCol']) {
+  if (mainParser.vlookupOptions['indexCol'] != null) {
     $('#selectindex').addClass('completed')
   }
   
-  if (mainParser.vlookupOptions['lookupCol']) {
+  if (mainParser.vlookupOptions['lookupCol'] != null) {
     $('#selectlookup').addClass('completed')
     
     // add the col append button, and only one
@@ -93,10 +93,10 @@ render = function () {
   // if the vlookup parser has all of its options ready, then we can run the vlookup
   mainParser.checkStatus()
   if (mainParser.vlookupOptions['ready'] && $('#lookup-start').length == 0) {
-    console.log("button enabled!")
-    $('#buttons-lookup').append("<button class='btn' id='lookup-start'>Start Lookup</button>")
+    // console.log("button enabled!")
+    $('#buttons-lookup').append("<a href='#lookup-start' class='btn' id='lookup-start'>Start Lookup</a>")
   } else {
-    console.log("button stays disabled")
+    // console.log("button stays disabled")
     $('#lookup-start').remove()
   }
   
@@ -114,7 +114,7 @@ buildTable = function (parsedData, sheetClassification) {
     var templatedRows = _.template(dataRowTemplate)
     
     //this rather tortured if-else adds a clicked class to the clicked row in the mainParser's options using the if-else to determine whether the option isn't a null + whether the header in question is == to the option's number
-    if (mainParser.vlookupOptions[sheetClassification + 'Col'] && headerIndex == mainParser.vlookupOptions[sheetClassification + 'Col']) {
+    if (mainParser.vlookupOptions[sheetClassification + 'Col'] != null && headerIndex === mainParser.vlookupOptions[sheetClassification + 'Col']) {
       // for selecting index/lookup cols
       
       $("#" + sheetClassification + " tbody").append(templatedRows({
@@ -123,7 +123,7 @@ buildTable = function (parsedData, sheetClassification) {
         headerIndex: headerIndex, 
         className: sheetClassification + '-clicked'
       }));
-    } else if (sheetClassification == 'lookup' && headerIndex == mainParser.vlookupOptions['colsToAppend']) {
+    } else if (sheetClassification == 'lookup' && headerIndex === mainParser.vlookupOptions['colsToAppend']) {
       // specific only to the lookup sheet, the columns to append are colored 
       
       $("#" + sheetClassification + " tbody").append(templatedRows({
@@ -166,6 +166,19 @@ var openDialogPicker = function (sheetClassification) {
       }
     })
   }) // close the dialog.showOpenDialog  
+}; 
+
+var openDialogSave = function (data) {
+  dialog.showSaveDialog({
+    title: "saved_file",
+    filters: [
+      {name: "CSV", extensions: ['csv']}
+    ]
+  }, function (fileName) {
+    fs.writeFile(fileName, data, function (error) {
+      console.log(error)
+    })
+  })
 }
 
 // action functions based on clicks 
@@ -186,6 +199,19 @@ $(document).on('click', '.delete-button', function (event) {
   render(); 
 })
 
+// start the lookup 
+$(document).on('click', '#lookup-start', function (event) {
+  mainParser.vlookup(); 
+  
+  // hide the lookup/index content for now and let's show the modal
+  var modalHTML = _.template(modaltemplate)
+  
+  $('#content').hide(); 
+  $('#main-container').append(modalHTML({
+    results: mainParser.finalResultArray
+  }))
+})
+
 // Handles clicks on the data tables, lookup and index alike
 $(document).on('click', '#index.data-table', function (event) {
   // the split is to parse the ID, which is classified as "row-[int]"
@@ -193,9 +219,25 @@ $(document).on('click', '#index.data-table', function (event) {
   render();  
 })
 
+// Download the CSV from results
+$(document).on('click', '.dl-button', function (event) {
+  if (mainParser.finalResultArray.length > 0) {
+    // var csvContent = "data:text/csv;charset=utf-8,";
+    // mainParser.finalResultArray.forEach(function(infoArray, index){
+    //    dataString = infoArray.join(",");
+    //    csvContent += index < mainParser.finalResultArray.length ? dataString+ "\n" : dataString;
+    // });
+    // var csvDataFile = encodeURI(csvContent);
+    // openDialogSave(csvDataFile);
+    openDialogSave(new CSV(mainParser.finalResultArray).encode())
+  }
+})
+
+
 $(document).on('click', '#lookup.data-table', function (event) {
   // the split is to parse the ID, which is classified as "row-[int]"
   
+  // if we are in column append mode, then we need to route data to the column append of the parser
   if (colAppendMode) {
     mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
   } else {
@@ -205,6 +247,7 @@ $(document).on('click', '#lookup.data-table', function (event) {
   render(); 
 })
 
+// Entering column append mode
 $(document).on('click', '#lookup-append', function (event) {
   colAppendMode = !colAppendMode; 
   render(); 
