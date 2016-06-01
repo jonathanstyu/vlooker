@@ -34,16 +34,17 @@ dataRowTemplate = "<tr class='<%= className %>'>\
 <td id='datatype-<%=headerIndex%>'><%= headerDataType %></td>\
 </tr>"
 
-modaltemplate = "<div class='column col-6 animated fadeInDown' id='completed'>\
+modaltemplate = "<div class='column col-6 animated fadeInDown' id='completed-modal'>\
 <p class='txt--center'>Completed Lookup Mapping</p>\
 <div class='btn-group btn-group-block pb-10' id='completed-buttons'>\
+<button class='btn dismiss-modal-button'>Dismiss</button>\
 <button class='btn dl-button'>Download</button>\
 </div>\
 <div class='divider'></div>\
-<table id='completed' class='table table-striped data-table'>\
+<table id='completed' class='table table-striped'>\
 <thead><tr>\
-<th class='txt--center'>Header Name</th>\
-<th class='txt--center'>Data Type</th>\
+<th class='table-head'>Header Name</th>\
+<th class='table-head'>Data Type</th>\
 </tr></thead>\
 <tbody>\
 <% for (var i = 0; i < results.length; i++) { %>\

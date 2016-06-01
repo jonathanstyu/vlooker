@@ -85,7 +85,7 @@ render = function () {
     }
   }
   
-  if (mainParser.vlookupOptions['colsToAppend']) {
+  if (mainParser.vlookupOptions['colsToAppend'].length > 0) {
     $('#selectaddCols').addClass('completed')
   }
   
@@ -123,7 +123,7 @@ buildTable = function (parsedData, sheetClassification) {
         headerIndex: headerIndex, 
         className: sheetClassification + '-clicked'
       }));
-    } else if (sheetClassification == 'lookup' && headerIndex === mainParser.vlookupOptions['colsToAppend']) {
+    } else if (sheetClassification == 'lookup' && _.contains(mainParser.vlookupOptions['colsToAppend'], headerIndex)) {
       // specific only to the lookup sheet, the columns to append are colored 
       
       $("#" + sheetClassification + " tbody").append(templatedRows({
@@ -181,12 +181,13 @@ var openDialogSave = function (data) {
   })
 }
 
-// action functions based on clicks 
+// action functions based on clicks - add a sheet
 $(document).on('click', '.add-button', function (event) {
   openDialogPicker(event.target.id); 
   render(); 
 })
 
+// Deleting a sheet also removes the completed categories for selecting columns
 $(document).on('click', '.delete-button', function (event) {
   mainParser.removeArray(event.target.id); 
   $('#upload' + event.target.id).removeClass('completed')
@@ -199,7 +200,34 @@ $(document).on('click', '.delete-button', function (event) {
   render(); 
 })
 
-// start the lookup 
+// Behavior for any click on a table, selecting a column to append/etc. 
+$(document).on('click', '.data-table', function (event) {
+  console.log()
+  if (event.target.class == 'table-head') {
+    return
+  }
+  // the split is to parse the ID, which is classified as "row-[int]"
+  
+  // if we are in column append mode, then we need to route data to the column append of the parser
+  if (colAppendMode) {
+    mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
+  } else {
+    var tabletype = $(this).closest('table').attr('id')
+    
+    mainParser.updateOptions(tabletype + 'Col', parseInt(event.target.id.split('-')[1])); 
+  }
+  
+  render(); 
+})
+
+// Entering column append mode
+$(document).on('click', '#lookup-append', function (event) {
+  colAppendMode = !colAppendMode; 
+  render(); 
+})
+
+
+// start the lookup, and open the modal 
 $(document).on('click', '#lookup-start', function (event) {
   mainParser.vlookup(); 
   
@@ -212,45 +240,20 @@ $(document).on('click', '#lookup-start', function (event) {
   }))
 })
 
-// Handles clicks on the data tables, lookup and index alike
-$(document).on('click', '#index.data-table', function (event) {
-  // the split is to parse the ID, which is classified as "row-[int]"
-  mainParser.updateOptions('indexCol', parseInt(event.target.id.split('-')[1])); 
-  render();  
-})
-
 // Download the CSV from results
 $(document).on('click', '.dl-button', function (event) {
+  // Finalresultarray check is for length
   if (mainParser.finalResultArray.length > 0) {
-    // var csvContent = "data:text/csv;charset=utf-8,";
-    // mainParser.finalResultArray.forEach(function(infoArray, index){
-    //    dataString = infoArray.join(",");
-    //    csvContent += index < mainParser.finalResultArray.length ? dataString+ "\n" : dataString;
-    // });
-    // var csvDataFile = encodeURI(csvContent);
-    // openDialogSave(csvDataFile);
     openDialogSave(new CSV(mainParser.finalResultArray).encode())
   }
 })
 
 
-$(document).on('click', '#lookup.data-table', function (event) {
-  // the split is to parse the ID, which is classified as "row-[int]"
-  
-  // if we are in column append mode, then we need to route data to the column append of the parser
-  if (colAppendMode) {
-    mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
-  } else {
-    mainParser.updateOptions('lookupCol', parseInt(event.target.id.split('-')[1]))
-  }
-  
-  render(); 
-})
-
-// Entering column append mode
-$(document).on('click', '#lookup-append', function (event) {
-  colAppendMode = !colAppendMode; 
-  render(); 
+// dimiss the modal 
+$(document).on('click', '.dismiss-modal-button', function (event) {
+  //Empty the completed modal and let's bring back the previous table content
+  $('#completed-modal').empty(); 
+  $('#content').show(); 
 })
 
 // Tied to keyboard shortcuts

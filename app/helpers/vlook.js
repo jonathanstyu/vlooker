@@ -15,7 +15,7 @@ var Parser = function () {
   this.vlookupOptions = {
     'indexCol': null,
     'lookupCol': null,
-    'colsToAppend': null,
+    'colsToAppend': [],
     'ready': false
   }
   
@@ -45,7 +45,7 @@ var Parser = function () {
     } else {
       this.lookupArray = []; 
       this.vlookupOptions['lookupCol'] = null;
-      this.vlookupOptions['colsToAppend'] = null;
+      this.vlookupOptions['colsToAppend'] = [];
     }
   }
   
@@ -53,19 +53,23 @@ var Parser = function () {
     this.vlookupOptions = {
       'indexCol': null,
       'lookupCol': null,
-      'colsToAppend': null,
+      'colsToAppend': [],
       'ready': false
     }
   }
   
   // helper function to populate vlookup options and check for readiness
   this.updateOptions = function (identifier, value) {
-    this.vlookupOptions[identifier] = value;
+    if (identifier == 'colsToAppend') {
+      this.vlookupOptions['colsToAppend'].push(value)
+    } else {
+      this.vlookupOptions[identifier] = value;
+    }
     this.checkStatus()
   }
   
   this.checkStatus = function () {
-    if (this.vlookupOptions['indexCol'] === null || this.vlookupOptions['lookupCol'] === null || this.vlookupOptions['colsToAppend'] === null) {
+    if (this.vlookupOptions['indexCol'] === null || this.vlookupOptions['lookupCol'] === null || this.vlookupOptions['colsToAppend'].length == 0) {
       this.vlookupOptions['ready'] = false; 
     } else {
       this.vlookupOptions['ready'] = true; 
@@ -101,11 +105,12 @@ var Parser = function () {
       // searchResult uses hash to find row[indexCol], the indexing item
       if (searchResult >= 0) {
         // if success, then take the ColstoAppend factor to join onto the end of the row
-        row.push(that.lookupArray[searchResult][colsToAppend]); 
+      _.each(colsToAppend, function (appendingColumn) {
+        row.push(that.lookupArray[searchResult][appendingColumn]);
+      })
       }
     }); 
     
-    console.log(resultArray)
     this.finalResultArray = resultArray;
   }   
 }
