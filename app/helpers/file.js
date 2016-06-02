@@ -104,12 +104,15 @@ render = function () {
 
 // helper function to build the table interface
 buildTable = function (parsedData, sheetClassification) {
-  if (parsedData == []) {
-    return
+  $("#" + sheetClassification + " tbody").empty()
+  
+  // Empty data state
+  if (parsedData.length == 0) {
+    var compiledEmptyState = _.template(emptyStateTemplate)
+    $("#" + sheetClassification + "-content-support").append(compiledEmptyState())
   }
   
   var zippedHeaders = _.zip(parsedData[0], parsedData[1])
-  $("#" + sheetClassification + " tbody").empty()
   _.each(zippedHeaders, function (headerSet, headerIndex) {
     var templatedRows = _.template(dataRowTemplate)
     
@@ -140,7 +143,7 @@ buildTable = function (parsedData, sheetClassification) {
         headerDataType: typeof headerSet[1],
         className: ''
       }));
-    } 
+    } // closes else statement  
   });
   
 }
@@ -202,7 +205,6 @@ $(document).on('click', '.delete-button', function (event) {
 
 // Behavior for any click on a table, selecting a column to append/etc. 
 $(document).on('click', '.data-table', function (event) {
-  console.log()
   if (event.target.class == 'table-head') {
     return
   }
@@ -212,8 +214,7 @@ $(document).on('click', '.data-table', function (event) {
   if (colAppendMode) {
     mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
   } else {
-    var tabletype = $(this).closest('table').attr('id')
-    
+    var tabletype = $(this).closest('table').attr('id')    
     mainParser.updateOptions(tabletype + 'Col', parseInt(event.target.id.split('-')[1])); 
   }
   

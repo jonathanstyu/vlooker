@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ['fileHTMLTemplate', 'datatabletemplate', 'dataRowTemplate', 'modaltemplate']
+var EXPORTED_SYMBOLS = ['fileHTMLTemplate', 'datatabletemplate', 'dataRowTemplate', 'modaltemplate', 'emptyStateTemplate']
 
 fileHTMLTemplate = "<table class='data-set grd-row'>\
 <tr>\
@@ -27,7 +27,9 @@ datatabletemplate = "<div class='column col-6 p2' id='<%= divID %>'>\
 <th class='txt--center'>Data Type</th>\
 </tr></thead>\
 <tbody></tbody>\
-</table></div>"
+</table>\
+<div id='<%= divID %>-content-support'></div>\
+</div>"
 
 dataRowTemplate = "<tr class='<%= className %>'>\
 <td id='header-<%=headerIndex%>'><%= headerName %></td>\
@@ -55,3 +57,9 @@ modaltemplate = "<div class='column col-6 animated fadeInDown' id='completed-mod
 <% } %>\
 </tbody>\
 </table></div>"
+  
+emptyStateTemplate = "<div class='empty'>\
+  <i class='icon icon-people'></i>\
+  <p class='empty-title'>Upload a Sheet</p>\
+  <p class='empty-meta'>CSVs supported only right now.</p>\
+</div>"

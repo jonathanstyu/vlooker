@@ -14,5 +14,5 @@ $(document).ready(function () {
         divID: divID
       }));
     })
-    
+    render()
 })
