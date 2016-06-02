@@ -78,26 +78,33 @@ render = function () {
   
   if (mainParser.vlookupOptions['lookupCol'] != null) {
     $('#selectlookup').addClass('completed')
-    
-    // add the col append button, and only one
-    if ($('#lookup-append').length == 0) {
-      $('#buttons-lookup').append("<button class='btn lookup-button' id='lookup-append'>Select Append Col</button>")
-    }
   }
   
   if (mainParser.vlookupOptions['colsToAppend'].length > 0) {
     $('#selectaddCols').addClass('completed')
   }
   
+  // Allow col append mode if a lookup array exists
+  if (mainParser.lookupArray.length == 0) {
+    $('#lookup-append').attr('disabled', 'disabled')
+  } else {
+    $('#lookup-append').removeAttr('disabled')
+  }
+  
+  //if col append mode is active, indicate so with btn. 
+  if (colAppendMode) {
+    $('#lookup-append').text("Col Append Active")
+  } else {
+    $('#lookup-append').text("Append Cols")
+  }
   
   // if the vlookup parser has all of its options ready, then we can run the vlookup
   mainParser.checkStatus()
-  if (mainParser.vlookupOptions['ready'] && $('#lookup-start').length == 0) {
-    // console.log("button enabled!")
-    $('#buttons-lookup').append("<a href='#lookup-start' class='btn' id='lookup-start'>Start Lookup</a>")
+  if (mainParser.vlookupOptions['ready']) {
+    $('#lookup-start').removeAttr('disabled')
   } else {
     // console.log("button stays disabled")
-    $('#lookup-start').remove()
+    $('#lookup-start').attr('disabled', 'disabled')
   }
   
 }
@@ -105,11 +112,15 @@ render = function () {
 // helper function to build the table interface
 buildTable = function (parsedData, sheetClassification) {
   $("#" + sheetClassification + " tbody").empty()
+  $("#" + sheetClassification + "-content-support").empty()
   
   // Empty data state
   if (parsedData.length == 0) {
     var compiledEmptyState = _.template(emptyStateTemplate)
     $("#" + sheetClassification + "-content-support").append(compiledEmptyState())
+    $('#' + sheetClassification + '.add-button').removeAttr('disabled')
+  } else {
+    $('#' + sheetClassification + '.add-button').attr('disabled', 'disabled')
   }
   
   var zippedHeaders = _.zip(parsedData[0], parsedData[1])
@@ -196,10 +207,6 @@ $(document).on('click', '.delete-button', function (event) {
   $('#upload' + event.target.id).removeClass('completed')
   $('#select' + event.target.id).removeClass('completed')
   
-  if (event.target.id == 'lookup') {
-    $('#lookup-append').remove()
-  }
-  
   render(); 
 })
 
@@ -208,13 +215,12 @@ $(document).on('click', '.data-table', function (event) {
   if (event.target.class == 'table-head') {
     return
   }
+  var tabletype = $(this).closest('table').attr('id')    
   // the split is to parse the ID, which is classified as "row-[int]"
-  
   // if we are in column append mode, then we need to route data to the column append of the parser
-  if (colAppendMode) {
+  if (colAppendMode && tabletype == 'lookup') {
     mainParser.updateOptions('colsToAppend', parseInt(event.target.id.split('-')[1]))
   } else {
-    var tabletype = $(this).closest('table').attr('id')    
     mainParser.updateOptions(tabletype + 'Col', parseInt(event.target.id.split('-')[1])); 
   }
   

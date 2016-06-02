@@ -19,6 +19,10 @@ datatabletemplate = "<div class='column col-6 p2' id='<%= divID %>'>\
 <div class='btn-group btn-group-block pb-10' id='buttons-<%= divID %>'>\
 <button class='btn delete-button' id='<%= divID %>'>Delete</button>\
 <button class='btn add-button' id='<%= divID %>'>Add</button>\
+<% if (divID == 'lookup') { %>\
+  <button class='btn lookup-button' id='lookup-append'>Append Cols</button>\
+  <button class='btn' id='lookup-start'>Start Lookup</button>\
+<% } %>\
 </div>\
 <div class='divider'></div>\
 <table id='<%= divID %>' class='table table-striped data-table'>\
@@ -37,7 +41,10 @@ dataRowTemplate = "<tr class='<%= className %>'>\
 </tr>"
 
 modaltemplate = "<div class='column col-6 animated fadeInDown' id='completed-modal'>\
-<p class='txt--center'>Completed Lookup Mapping</p>\
+<div class='toast toast-success'>\
+  <button class='btn btn-clear float-right'></button>\
+  Completed Lookup Mapping\
+</div><hr>\
 <div class='btn-group btn-group-block pb-10' id='completed-buttons'>\
 <button class='btn dismiss-modal-button'>Dismiss</button>\
 <button class='btn dl-button'>Download</button>\

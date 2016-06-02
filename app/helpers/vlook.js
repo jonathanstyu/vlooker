@@ -69,6 +69,7 @@ var Parser = function () {
   }
   
   this.checkStatus = function () {
+    console.log(this.vlookupOptions)
     if (this.vlookupOptions['indexCol'] === null || this.vlookupOptions['lookupCol'] === null || this.vlookupOptions['colsToAppend'].length == 0) {
       this.vlookupOptions['ready'] = false; 
     } else {
